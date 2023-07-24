@@ -1,9 +1,10 @@
 import React from "react";
 
 export const FrontPage: React.FC = () => {
+    
+    //SetDepartments('')
     return (
         <div className="">
-            Amazon Clone
         </div>
     )
 }
