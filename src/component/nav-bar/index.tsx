@@ -90,7 +90,7 @@ export const NavBar: React.FC<FrontPageProps> = (props) => {
                         {
                             departments.map((department)=>{
                                 return(
-                                    <a onClick={()=> setcurrrentDepartment(department.departmentId)}>
+                                    <a key={department.departmentId} onClick={()=> setcurrrentDepartment(department.departmentId)}>
                                         {department.departmentName}
                                     </a>
                                 )

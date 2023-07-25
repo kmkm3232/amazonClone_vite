@@ -321,7 +321,23 @@ function App() {
       about: 'About text'
     }
   ])
-  const [shoppingCart, setShoppingCart] = React.useState([])
+  const [shoppingCart, setShoppingCart] = React.useState(Array<{id:number, qty:number, options?:Array<any>}>)
+  
+  const addToCart = (id:number, qty:number, options?:Array<any>) =>{
+    let temp = shoppingCart
+    let curr = temp.find(item => item.id == id)
+    if(curr){
+      curr.qty += qty
+    }else{
+      temp.push({
+        id:id,
+        qty: qty,
+        options: options
+      })
+    }
+    setShoppingCart(temp)
+  }
+
   return (
     <>
       <NavBar departments={departments} setDepartments={setDepartments}/>
@@ -332,7 +348,7 @@ function App() {
           element={<ItemsPage items={items} setItems={setItems} departments={departments}/>} />
         <Route 
           path='itempage/:currentDeparment/:currentSubDepartment/:itemId' 
-          element={<ItemPage items={items} departments={departments}/>} />
+          element={<ItemPage items={items} departments={departments} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} addToCart={addToCart}/>} />
       </Routes>
     </>
   )

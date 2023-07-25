@@ -45,7 +45,7 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                 {
                     currentDeparment.subDepartment.map((subDe)=>{
                         return(
-                            <li>{subDe.subDepartmentName}</li>
+                            <li key={subDe.subDepartmentId}>{subDe.subDepartmentName}</li>
                         )
                     })
                 }
@@ -59,9 +59,8 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                 {
                     newItems.map((newItem)=>{
                         return (
-                            <div className='min-h-[25rem]  border border-r-2 border-gray-200'>
+                            <div key={newItem.itemId} className='min-h-[25rem]  border border-r-2 border-gray-200'>
                                 <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.itemId}`}>
-                                        
                                     <div className='bg-gray-300 h-[70%]'>Image</div>
                                     <div className='m-2'><a>{newItem.itemName}</a></div>
                                     <div className='m-2'><a>{newItem.ratings} | {newItem.ratingCount}</a></div>
