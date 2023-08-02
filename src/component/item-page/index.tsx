@@ -28,12 +28,11 @@ interface ItemPageProp{
         }[]
     }[],
     setShoppingCart: React.Dispatch<React.SetStateAction<any>>,
-    shoppingCart: Array<{id:number, qty:number, options?:Array<any>}>,
-    addToCart: (id: number, qty: number, options?: Array<any>) => void
+    shoppingCart: Array<{id:number, qty:number, options?:Array<any>, depId: number, subDepId: number, checked: boolean, price: number}>,
 }
 const ItemPage: React.FC<ItemPageProp> = (props) => {
     const {itemId, currentDeparment, currentSubDepartment} = useParams()
-    const {items, departments, setShoppingCart, shoppingCart, addToCart} = props
+    const {items, departments, setShoppingCart, shoppingCart} = props
     const qtyRef = React.useRef<HTMLSelectElement>(null)
     let currDep = departments.filter((dep)=> dep.departmentId == Number(currentDeparment))[0]
     let currentSubDep = currDep.subDepartment.filter((subdep)=> subdep.subDepartmentId == Number(currentSubDepartment))[0]
@@ -42,9 +41,27 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
     let qtyOption = new Array(10).fill(0)
     const handleOnsubmit = (event:React.FormEvent<HTMLFormElement>) =>{
         event.preventDefault();
-        addToCart(target.itemId, Number(qtyRef.current?.value),[])
-        console.log(shoppingCart)
+        /// [...] is a must to let react rerender
+        let temp = [...shoppingCart]
+        let curr = temp.find(item => item.id == target.itemId)
+        if(curr){
+            curr.qty += Number(qtyRef.current?.value)
+        }else{
+            temp.push({
+                id:target.itemId,
+                qty: Number(qtyRef.current?.value),
+                options: [],
+                depId: currDep.departmentId,
+                subDepId: currentSubDep.subDepartmentId,
+                checked: true,
+                price: Number((target.price * target.discount).toFixed(2))
+            })
+        }
+        setShoppingCart(temp)
     }
+    React.useEffect(()=>{
+        localStorage.setItem("cart", JSON.stringify(shoppingCart))
+    }, [shoppingCart])
   return (
     <div className='mt-[-70px] mx-[2.5%] min-h-[85vh]'>
         <div className=''>Reserved for ads</div>

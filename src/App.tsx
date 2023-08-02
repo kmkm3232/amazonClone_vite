@@ -5,6 +5,7 @@ import FrontPage from './component/front-page'
 import  React from 'react'
 import ItemsPage from './component/items-page'
 import ItemPage from './component/item-page'
+import ShoppCartPage from './component/shopp-cart-page'
 
 function App() {
   const [departments, setDepartments] = React.useState([
@@ -321,26 +322,10 @@ function App() {
       about: 'About text'
     }
   ])
-  const [shoppingCart, setShoppingCart] = React.useState(Array<{id:number, qty:number, options?:Array<any>}>)
-  
-  const addToCart = (id:number, qty:number, options?:Array<any>) =>{
-    let temp = shoppingCart
-    let curr = temp.find(item => item.id == id)
-    if(curr){
-      curr.qty += qty
-    }else{
-      temp.push({
-        id:id,
-        qty: qty,
-        options: options
-      })
-    }
-    setShoppingCart(temp)
-  }
-
+  const [shoppingCart, setShoppingCart] = React.useState(JSON.parse(localStorage.getItem("cart") || '{}'))
   return (
     <>
-      <NavBar departments={departments} setDepartments={setDepartments}/>
+      <NavBar shoppingCart={shoppingCart} departments={departments} setDepartments={setDepartments}/>
       <Routes> 
         <Route path='/' element={ <FrontPage />} />
         <Route 
@@ -348,7 +333,8 @@ function App() {
           element={<ItemsPage items={items} setItems={setItems} departments={departments}/>} />
         <Route 
           path='itempage/:currentDeparment/:currentSubDepartment/:itemId' 
-          element={<ItemPage items={items} departments={departments} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} addToCart={addToCart}/>} />
+          element={<ItemPage items={items} departments={departments} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart}/>} />
+          <Route path='shoppingcart' element={ <ShoppCartPage shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} items={items} departments={departments} />}/>
       </Routes>
     </>
   )

@@ -12,11 +12,14 @@ interface FrontPageProps{
             subDepartmentName: string
         }[]
     }[],
-    setDepartments: React.Dispatch<React.SetStateAction<any>>
+    setDepartments: React.Dispatch<React.SetStateAction<any>>,
+    shoppingCart: Array<{id:number, qty:number, options?:Array<any>}>
 }
 export const NavBar: React.FC<FrontPageProps> = (props) => {
-    const { departments, setDepartments } = props
+    const { departments, setDepartments, shoppingCart } = props
     const [currrentDepartment, setcurrrentDepartment] = React.useState(0)
+    let totalItems = 0
+    shoppingCart?.forEach((item)=> totalItems += item.qty)
     const [nav, setNav] = React.useState(false)
     return (
         <div className="bg-black h-24 text-white py-2 inline-block whitespace-nowrap min-w-[100%]">
@@ -58,8 +61,13 @@ export const NavBar: React.FC<FrontPageProps> = (props) => {
                         <p>& Orders</p>
                     </button>
                     <div className="flex grow">
+                        <div className="relative">
+                        <div className={totalItems < 99 ?  " text-orange-400 text-2xl font-bold absolute top-[-3px] right-[10px]" :
+                    " text-orange-400 text-xl font-bold absolute top-[-3px] right-[3px]"
+                    }>{totalItems}</div>
                         <AiOutlineShoppingCart className="" size={40}/>
-                        <button className="mt-2">Cart</button>
+                        </div>
+                        <Link to={`/shoppingcart`}><button className="mt-2">Cart</button></Link>
                     </div>
                 </div>
             </div>
