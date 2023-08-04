@@ -6,6 +6,7 @@ import  React from 'react'
 import ItemsPage from './component/items-page'
 import ItemPage from './component/item-page'
 import ShoppCartPage from './component/shopp-cart-page'
+import SearchPage from './component/search-page'
 
 function App() {
   const [departments, setDepartments] = React.useState([
@@ -334,7 +335,13 @@ function App() {
         <Route 
           path='itempage/:currentDeparment/:currentSubDepartment/:itemId' 
           element={<ItemPage items={items} departments={departments} shoppingCart={shoppingCart} setShoppingCart={setShoppingCart}/>} />
-          <Route path='shoppingcart' element={ <ShoppCartPage shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} items={items} departments={departments} />}/>
+        <Route 
+          path='shoppingcart' 
+          element={ <ShoppCartPage shoppingCart={shoppingCart} setShoppingCart={setShoppingCart} items={items} departments={departments} />}/>
+        <Route 
+          path='searchpage/:departmentId/:query?'
+          element={<SearchPage items={items} departments={departments}/>}
+        />
       </Routes>
     </>
   )

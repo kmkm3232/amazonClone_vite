@@ -34,7 +34,6 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     const { departmentId, subdepartmentId } = useParams()
     const { items, setItems, departments} = props
     let newItems = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
-    console.log(newItems.length)
     let currentDeparment = departments.filter((deparment)=> deparment.departmentId == Number(departmentId))[0]
     let currentSubDepartment = currentDeparment.subDepartment.filter((subDes)=> subDes.subDepartmentId == Number(subdepartmentId))[0]
   return (

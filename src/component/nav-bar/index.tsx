@@ -2,7 +2,7 @@ import React from "react";
 import { AiOutlineSearch, AiOutlineShoppingCart } from "react-icons/ai"
 import { CiLocationOn } from "react-icons/ci"
 import { AiOutlineClose } from "react-icons/ai"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 interface FrontPageProps{
     departments: {
         departmentId: number, 
@@ -18,7 +18,13 @@ interface FrontPageProps{
 export const NavBar: React.FC<FrontPageProps> = (props) => {
     const { departments, setDepartments, shoppingCart } = props
     const [currrentDepartment, setcurrrentDepartment] = React.useState(0)
+    const navigate = useNavigate()
+    const searchRef = React.useRef<HTMLInputElement>(null)
+    const depSelectRef = React.useRef<HTMLSelectElement>(null)
     let totalItems = 0
+    const handleOnSearch = () =>{
+        navigate(`/searchpage/${depSelectRef.current!.value || 0}/${searchRef.current!.value || ''}`)
+    }
     shoppingCart?.forEach((item)=> totalItems += item.qty)
     const [nav, setNav] = React.useState(false)
     return (
@@ -35,15 +41,18 @@ export const NavBar: React.FC<FrontPageProps> = (props) => {
                     </div>
                 </div>
                 <div className="text-black flex max-w-[950px] w-full hover py-1" >
-                    <select className="px-1 bg-gray-200 rounded-l-md w-[5%] text-xs">
-                        <option className="">All</option>
-                        <option>Arts</option>
-                        <option>Computers</option>
-                        <option>Helath</option>
-                        <option>Food</option>
+                    <select id='depSelect' ref={depSelectRef} className="px-1 bg-gray-200 rounded-l-md text-xs">
+                        <option value={0}>All</option>
+                        {
+                            departments.map((dep)=>{
+                                return(
+                                    <option key={dep.departmentId} value={dep.departmentId}>{dep.departmentName}</option>
+                                )
+                            })
+                        }
                     </select>
-                    <input className="px-1 min-w-[90%] border-none outline-none " placeholder="Search Amazon"></input>
-                    <AiOutlineSearch className="w-[5%] p-2 bg-yellow-500 text-black rounded-r-md h-full" size={30} />
+                    <input type="text" id='searchInput' className="px-1 grow  border-none outline-none " ref={searchRef}  placeholder="Search Amazon"></input>
+                    <AiOutlineSearch onClick={()=> handleOnSearch()} className="p-2 bg-yellow-500 text-black rounded-r-md h-full" size={30} />
                 </div>
                 <div className="grow flex text-sm">
                     <select className="grow text-white bg-black text-center">
