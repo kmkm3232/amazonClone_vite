@@ -323,7 +323,7 @@ function App() {
       about: 'About text'
     }
   ])
-  const [shoppingCart, setShoppingCart] = React.useState(JSON.parse(localStorage.getItem("cart") || '{}'))
+  const [shoppingCart, setShoppingCart] = React.useState(JSON.parse(localStorage.getItem("cart") || '[]'))
   return (
     <>
       <NavBar shoppingCart={shoppingCart} departments={departments} setDepartments={setDepartments}/>

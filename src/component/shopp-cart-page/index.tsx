@@ -105,7 +105,7 @@ export const ShoppCartPage: React.FC<ShoppingCartProps> = (props) => {
         <div className="flex mt-[-70px] mx-[3%] min-h-[85vh]">
             <div className="grow basis-4/5">
                 <h1 className="text-2xl font-bold">Shopping Cart</h1>
-                <h2 className="text-xs">Deselect all items</h2>
+                <button className="text-xs mt-2 text-[#007185] hover:underline">Deselect all items</button>
                 <hr className={deleted.id == -1 ? "hidden" : "my-2"}></hr>
                 <div className={deleted.id == -1 ? "hidden" : "p-3"}> <Link to={`/itempage/${deleted.depId}/${deleted.subDepId}/${deleted.id}`}>{items.find((item)=> item.itemId == deleted.id)?.itemName} </Link>was removed from Shopping Cart.</div>
                 <hr className="my-2"></hr>
@@ -129,11 +129,11 @@ export const ShoppCartPage: React.FC<ShoppingCartProps> = (props) => {
                                                     <button onClick={()=> handleIncrement(good)} className="text-md border border-gray-300 px-1 hover:border-orange-400 hover:first-letter:text-orange-400">+</button>
                                                 </div>
                                                 <a className="text-gray-300 mx-2">|</a>
-                                                <a onClick={()=>handleOnDelete(good.id, good.depId, good.subDepId)}>Delete</a>
+                                                <button className="text-[#007185] hover:underline" onClick={()=>handleOnDelete(good.id, good.depId, good.subDepId)}>Delete</button>
                                                 <a className="text-gray-300 mx-2">|</a>
-                                                <a>Save for Later</a>
+                                                <button className="text-[#007185] hover:underline">Save for Later</button>
                                                 <a className="text-gray-300 mx-2">|</a>
-                                                <a>Share</a>
+                                                <button className="text-[#007185] hover:underline">Share</button>
                                             </div>
                                         </div>
                                     </div>

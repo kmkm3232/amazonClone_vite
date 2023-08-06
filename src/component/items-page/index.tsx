@@ -37,7 +37,7 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     let currentDeparment = departments.filter((deparment)=> deparment.departmentId == Number(departmentId))[0]
     let currentSubDepartment = currentDeparment.subDepartment.filter((subDes)=> subDes.subDepartmentId == Number(subdepartmentId))[0]
   return (
-    <div className='flex col min-h-[40rem] mt-[-70px]'>
+    <div className='flex col min-h-[40rem] mt-[-79px]'>
         <div className='bg-yellow-500 w-[25%]'>
             <h1>Current Department: {currentDeparment.departmentName}</h1>
             <ul>
@@ -61,7 +61,7 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                             <div key={newItem.itemId} className='min-h-[25rem]  border border-r-2 border-gray-200'>
                                 <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.itemId}`}>
                                     <div className='bg-gray-300 h-[70%]'>Image</div>
-                                    <div className='m-2'><a>{newItem.itemName}</a></div>
+                                    <div className='m-2 hover:text-orange-400'><a>{newItem.itemName}</a></div>
                                     <div className='m-2'><a>{newItem.ratings} | {newItem.ratingCount}</a></div>
                                     <div className='m-2'><a>${newItem.price}</a></div>
                                 </Link>
