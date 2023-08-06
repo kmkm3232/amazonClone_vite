@@ -50,9 +50,13 @@ export const SearchPage: React.FC<SearchPageProp> = (props) => {
                 <div className='grid grid-cols-4 gap-2'>
                     {
                         newItems.map((newItem)=>{
+                            let depId = Number(departmentId)
+                            if(depId == 0){
+                                depId = (departments.filter((dep)=> dep.subDepartment.some((subdep)=> subdep.subDepartmentId == newItem.subdepartmentId))[0].departmentId)
+                            }
                             return (
                                 <div key={newItem.itemId} className='min-h-[25rem]  border border-r-2 border-gray-200'>
-                                    <Link to={`/itempage/${departmentId}/${newItem.subdepartmentId}/${newItem.itemId}`}>
+                                    <Link to={`/itempage/${depId}/${newItem.subdepartmentId}/${newItem.itemId}`}>
                                         <div className='bg-gray-300 h-[70%]'>Image</div>
                                         <div className='m-2'><a>{newItem.itemName}</a></div>
                                         <div className='m-2'><a>{newItem.ratings} | {newItem.ratingCount}</a></div>
