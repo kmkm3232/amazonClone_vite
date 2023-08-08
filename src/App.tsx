@@ -98,7 +98,7 @@ function App() {
       discount: 0.9,
       subdepartmentId: 2,
       options:[],
-      ratings: 4.8,
+      ratings: 4.3,
       ratingCount: 92,
       about: 'About text',
     },
@@ -120,7 +120,7 @@ function App() {
       discount: 1,
       subdepartmentId: 5,
       options:[],
-      ratings: 4.8,
+      ratings: 4.4,
       ratingCount: 31,
       about: 'About text'
     },
@@ -131,7 +131,7 @@ function App() {
       discount: 0.8,
       subdepartmentId: 5,
       options:[],
-      ratings: 4.8,
+      ratings: 4.6,
       ratingCount: 31,
       about: 'About text'
     },
@@ -164,7 +164,7 @@ function App() {
       discount: 1,
       subdepartmentId: 9,
       options:[],
-      ratings: 3.8,
+      ratings: 3.3,
       ratingCount: 1231,
       about: 'About text'
     },
@@ -208,7 +208,7 @@ function App() {
       discount: 1,
       subdepartmentId: 6,
       options:[],
-      ratings: 3.8,
+      ratings: 3.5,
       ratingCount: 1231,
       about: 'About text'
     },
@@ -252,7 +252,7 @@ function App() {
       discount: 1,
       subdepartmentId: 3,
       options:[],
-      ratings: 4.2,
+      ratings: 4.6,
       ratingCount: 37,
       about: 'About text'
     },
@@ -307,7 +307,7 @@ function App() {
       discount: 1,
       subdepartmentId: 2,
       options:[],
-      ratings: 3.2,
+      ratings: 3.5,
       ratingCount: 37,
       about: 'About text'
     },
@@ -318,7 +318,7 @@ function App() {
       discount: 1,
       subdepartmentId: 2,
       options:[],
-      ratings: 3.2,
+      ratings: 3.3,
       ratingCount: 37,
       about: 'About text'
     }

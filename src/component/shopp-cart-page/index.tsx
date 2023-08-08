@@ -107,7 +107,7 @@ export const ShoppCartPage: React.FC<ShoppingCartProps> = (props) => {
                 <h1 className="text-2xl font-bold">Shopping Cart</h1>
                 <button className="text-xs mt-2 text-[#007185] hover:underline">Deselect all items</button>
                 <hr className={deleted.id == -1 ? "hidden" : "my-2"}></hr>
-                <div className={deleted.id == -1 ? "hidden" : "p-3"}> <Link to={`/itempage/${deleted.depId}/${deleted.subDepId}/${deleted.id}`}>{items.find((item)=> item.itemId == deleted.id)?.itemName} </Link>was removed from Shopping Cart.</div>
+                <div className={deleted.id == -1 ? "hidden" : "p-3"}> <Link className="hover:underline text-[#007185]" to={`/itempage/${deleted.depId}/${deleted.subDepId}/${deleted.id}`}>{items.find((item)=> item.itemId == deleted.id)?.itemName} </Link>was removed from Shopping Cart.</div>
                 <hr className="my-2"></hr>
                 <div>
                     {
@@ -143,7 +143,7 @@ export const ShoppCartPage: React.FC<ShoppingCartProps> = (props) => {
                         })
                     }
                     <div className="text-right text-lg">
-                        <span>{`SubTotal (${itemNum}) items):`}</span> <span className="font-bold">{`$ ${totalPrice}`}</span>
+                        <span>{`SubTotal (${itemNum} items):`}</span> <span className="font-bold">{`$ ${totalPrice}`}</span>
                     </div>
                 </div>
                 

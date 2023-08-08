@@ -1,4 +1,6 @@
 import React from 'react'
+import { AiFillStar } from 'react-icons/ai'
+import { FaStarHalfStroke } from 'react-icons/fa6'
 import { Link, useParams } from 'react-router-dom'
 interface ItemsPageProp{
     items: {
@@ -62,7 +64,23 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                                 <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.itemId}`}>
                                     <div className='bg-gray-300 h-[70%]'>Image</div>
                                     <div className='m-2 hover:text-orange-400'><a>{newItem.itemName}</a></div>
-                                    <div className='m-2'><a>{newItem.ratings} | {newItem.ratingCount}</a></div>
+                                    <div className='m-2 flex'>
+                                        <div className='flex'>
+                                            {
+                                                [...Array(Math.trunc(newItem.ratings))].map((e, i) =>{
+                                                    console.log(Number((newItem.ratings-Math.trunc(newItem.ratings)).toFixed(2)))
+                                                    return (
+                                                        <AiFillStar key={i} className="text-orange-400 mt-1"/>
+                                                    )
+                                                })
+                                            }
+                                            {
+                                                Number((newItem.ratings-Math.trunc(newItem.ratings)).toFixed(2)) >= 0.8 ? <AiFillStar className="text-orange-400 mt-1"/> :
+                                                Number((newItem.ratings-Math.trunc(newItem.ratings)).toFixed(2)) > 0.2 ? <FaStarHalfStroke className="text-orange-400 mt-1"/> : ''
+                                            }
+                                        </div>
+                                        <a className='ml-2'>{newItem.ratingCount}</a>
+                                    </div>
                                     <div className='m-2'><a>${newItem.price}</a></div>
                                 </Link>
                             </div>

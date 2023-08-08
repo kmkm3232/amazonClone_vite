@@ -117,14 +117,14 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
                 </div>
             </div>
             <div className='grow basis-1/6 border-2 rounded-md border-gray-300'>
-                <form className='p-2' onSubmit={handleOnsubmit}>
+                <form className='flex flex-col p-2' onSubmit={handleOnsubmit}>
                     <label>
                         <div className='flex mt-2'>
                             <h1 className={target.discount < 1 ? "" : "hidden"}>-{((1-target.discount)*100).toFixed(1)}%</h1>
                             <h1 className='mx-2 text-2xl text-bold'>${(target.price * target.discount).toFixed(2)}</h1>
                         </div>
                     </label>
-                    <select ref={qtyRef} size={1} className='mt-3 drop-shadow-md border rounded-lg border-gray-300 bg-slate-100'>
+                    <select ref={qtyRef} size={1} className='w-[80px] mt-3 drop-shadow-md border rounded-lg border-gray-300 bg-slate-100'>
                         {
                             qtyOption.map((qty, index)=>{
                                 return(
@@ -133,9 +133,7 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
                             })
                         }
                     </select>
-                    <div className='mt-2 rounded-3xl bg-yellow-400 p-2 text-center hover:bg-yellow-500'>
-                        <button type='submit'>Add to Cart</button>
-                    </div>
+                    <button className='mt-2 rounded-3xl bg-yellow-400 p-2 text-center hover:bg-yellow-500' type='submit'>Add to Cart</button>
                 </form>
             </div>
         </div>

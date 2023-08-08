@@ -58,7 +58,7 @@ export const SearchPage: React.FC<SearchPageProp> = (props) => {
                                 <div key={newItem.itemId} className='min-h-[25rem]  border border-r-2 border-gray-200'>
                                     <Link to={`/itempage/${depId}/${newItem.subdepartmentId}/${newItem.itemId}`}>
                                         <div className='bg-gray-300 h-[70%]'>Image</div>
-                                        <div className='m-2'><a>{newItem.itemName}</a></div>
+                                        <div className='m-2 hover:text-orange-400'><a>{newItem.itemName}</a></div>
                                         <div className='m-2'><a>{newItem.ratings} | {newItem.ratingCount}</a></div>
                                         <div className='m-2'><a>${newItem.price}</a></div>
                                     </Link>
