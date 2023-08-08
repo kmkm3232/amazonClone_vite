@@ -129,13 +129,13 @@ export const NavBar: React.FC<FrontPageProps> = (props) => {
                                         {
                                             d.subDepartment.map((sd)=>{
                                                 return (
-                                                    <Link to={`/itemspage/${d.departmentId}/${sd.subDepartmentId}`} >
+                                                    <Link key={sd.subDepartmentId} to={`/itemspage/${d.departmentId}/${sd.subDepartmentId}`} >
                                                         <div  className="p-2 text-xs hover:bg-gray-200"
                                                             onClick={()=>{
                                                                 setcurrrentDepartment(0)
                                                                 setNav(!nav)
                                                             }} 
-                                                            key={sd.subDepartmentId}>
+                                                            >
                                                             {sd.subDepartmentName}
                                                         </div>
                                                     </Link>

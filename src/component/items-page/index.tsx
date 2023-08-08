@@ -63,12 +63,11 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                             <div key={newItem.itemId} className='min-h-[25rem]  border border-r-2 border-gray-200'>
                                 <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.itemId}`}>
                                     <div className='bg-gray-300 h-[70%]'>Image</div>
-                                    <div className='m-2 hover:text-orange-400'><a>{newItem.itemName}</a></div>
+                                    <div className='m-2 hover:text-orange-400'>{newItem.itemName}</div>
                                     <div className='m-2 flex'>
                                         <div className='flex'>
                                             {
                                                 [...Array(Math.trunc(newItem.ratings))].map((e, i) =>{
-                                                    console.log(Number((newItem.ratings-Math.trunc(newItem.ratings)).toFixed(2)))
                                                     return (
                                                         <AiFillStar key={i} className="text-orange-400 mt-1"/>
                                                     )
@@ -79,9 +78,9 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                                                 Number((newItem.ratings-Math.trunc(newItem.ratings)).toFixed(2)) > 0.2 ? <FaStarHalfStroke className="text-orange-400 mt-1"/> : ''
                                             }
                                         </div>
-                                        <a className='ml-2'>{newItem.ratingCount}</a>
+                                        <span className='ml-2'>{newItem.ratingCount}</span>
                                     </div>
-                                    <div className='m-2'><a>${newItem.price}</a></div>
+                                    <div className='m-2'>${newItem.price}</div>
                                 </Link>
                             </div>
                         )
