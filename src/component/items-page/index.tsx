@@ -1,5 +1,5 @@
 import React from 'react'
-import { AiFillStar } from 'react-icons/ai'
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai'
 import { FaStarHalfStroke } from 'react-icons/fa6'
 import { Link, useParams } from 'react-router-dom'
 interface ItemsPageProp{
@@ -35,22 +35,64 @@ interface ItemsPageProp{
 const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     const { departmentId, subdepartmentId } = useParams()
     const { items, setItems, departments} = props
-    let newItems = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
+    const baseNewItems = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
+    const [newItems, setNewItems] = React.useState(baseNewItems)
+    const [onReviewFilter, setOnReviewFilter] = React.useState(false)
     let currentDeparment = departments.filter((deparment)=> deparment.departmentId == Number(departmentId))[0]
     let currentSubDepartment = currentDeparment.subDepartment.filter((subDes)=> subDes.subDepartmentId == Number(subdepartmentId))[0]
+    const handleReviewFilter = (stars: number) =>{
+        setNewItems(baseNewItems.filter((item)=> item.ratings >= stars))
+        setOnReviewFilter(true)
+    }
+    const handleClearReviewFilter = () =>{
+        setOnReviewFilter(false)
+        setNewItems(baseNewItems)
+    }
   return (
     <div className='flex col min-h-[40rem] mt-[-79px]'>
-        <div className='bg-yellow-500 w-[25%]'>
-            <h1>Current Department: {currentDeparment.departmentName}</h1>
+        <div className=' w-[25%]'>
+            <h1 className='p-2'>Current Department: {currentDeparment.departmentName}</h1>
             <ul>
                 {
                     currentDeparment.subDepartment.map((subDe)=>{
                         return(
-                            <li key={subDe.subDepartmentId}>{subDe.subDepartmentName}</li>
+                            <li className='p-2' key={subDe.subDepartmentId}>{`<`}{subDe.subDepartmentName}</li>
                         )
                     })
                 }
             </ul>
+            <div>
+                <h1 className='px-2'>Customer Review</h1>
+                <button onClick={() => handleClearReviewFilter()} className={onReviewFilter ? "px-2 text-xs" : "hidden"}>{`<`}<a className='hover:text-orange-400'>Clear</a></button>
+                <button className='flex hover:text-orange-400 px-2' onClick={() => handleReviewFilter(4)}>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/> & Up
+                </button>
+                <button className='flex hover:text-orange-400 px-2' onClick={() => handleReviewFilter(3)}>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/> & Up
+                </button>
+                <button className='flex hover:text-orange-400 px-2' onClick={() => handleReviewFilter(2)}>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/> & Up
+                </button>
+                <button className='flex hover:text-orange-400 px-2' onClick={() => handleReviewFilter(1)}>
+                    <AiFillStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/>
+                    <AiOutlineStar className="text-orange-400 mt-1"/> & Up
+                </button>
+            </div>
         </div>
         <div className=' w-full '>
             <div>
