@@ -34,28 +34,41 @@ interface ItemsPageProp{
 
 const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     const { departmentId, subdepartmentId } = useParams()
-    console.log(departmentId, subdepartmentId)
     const { items, setItems, departments} = props
-    const [newItems, setNewItems] = React.useState(items.filter((item)=> item.subdepartmentId == Number(subdepartmentId)))
-    //let newItems = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
-    const [onReviewFilter, setOnReviewFilter] = React.useState(false)
+    let baseItem = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
+    const [newItems, setNewItems] = React.useState(baseItem)
+    const [reviewFilter, setReviewFilter] = React.useState(0)
+    const [priceFilter, setPriceFilter] = React.useState({min: 0, max: Infinity})
     const minRef = React.useRef<HTMLInputElement>(null)
     const maxRef = React.useRef<HTMLInputElement>(null)
     let currentDeparment = departments.filter((deparment)=> deparment.departmentId == Number(departmentId))[0]
     let currentSubDepartment = currentDeparment.subDepartment.filter((subDes)=> subDes.subDepartmentId == Number(subdepartmentId))[0]
-    const handleReviewFilter = (stars: number) =>{
-        //setNewItems(baseNewItems.filter((item)=> item.ratings >= stars))
-        //setOnReviewFilter(true)
-    }
-    const handleClearReviewFilter = () =>{
-        //setOnReviewFilter(false)
-        //setNewItems(baseNewItems)
-    }
-    const handlePriceFilter = (min: number, max: number) =>{
-        //setNewItems(baseNewItems.filter((item) => ( Number((item.price*item.discount).toFixed(2)) >= min && Number((item.price*item.discount).toFixed(2)) <= max )))
-    }
+    // const handleReviewFilter = (stars: number) =>{
+    //     setNewItems(baseItem.filter((item)=> item.ratings >= stars))
+    //     setOnReviewFilter(stars)
+    // }
+    // const handleClearReviewFilter = () =>{
+    //     setOnReviewFilter(0)
+    //     setNewItems(baseItem.filter((item) => ( Number((item.price*item.discount).toFixed(2)) >= onPriceFilter.min && Number((item.price*item.discount).toFixed(2)) <= onPriceFilter.max )))
+    // }
+    // const handlePriceFilter = (min: number, max: number) =>{
+    //     setOnPriceFilter({min: min, max: max})
+    //     setNewItems(baseItem.filter((item) => ( Number((item.price*item.discount).toFixed(2)) >= min && Number((item.price*item.discount).toFixed(2)) <= max )))
+    // }
     React.useEffect(()=>{
-        setNewItems(items.filter((item)=> item.subdepartmentId == Number(subdepartmentId)))
+        setNewItems(
+                baseItem.filter((item)=> item.ratings >= reviewFilter)
+                .filter(
+                    (item) => (Number((item.price*item.discount).toFixed(2)) >= priceFilter.min 
+                    && Number((item.price*item.discount).toFixed(2)) <= priceFilter.max )
+                )
+            )
+    },[reviewFilter, priceFilter])
+    React.useEffect(()=>{
+        baseItem = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
+        setNewItems(baseItem)
+        setReviewFilter(0)
+        setPriceFilter({min: 0, max: Infinity})
     },[subdepartmentId])
   return (
     <div className='flex col min-h-[40rem] mt-[-79px]'>
@@ -72,29 +85,29 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
             </ul>
             <div id="ratingFilter" className='flex flex-col'>
                 <h1 className='px-2'>Customer Review</h1>
-                <button onClick={() => handleClearReviewFilter()} className={onReviewFilter ? "px-2 text-xs" : "hidden"}>{`<`}<a className='hover:text-orange-400'>Clear</a></button>
-                <button className='flex hover:text-[#C7511F] px-2' onClick={() => handleReviewFilter(4)}>
+                <button onClick={() => setReviewFilter(0)} className={reviewFilter > 0 ? "flex px-2 text-xs" : "hidden"}>{`<`}<a className='hover:text-orange-400'>Clear</a></button>
+                <button className='flex hover:text-[#C7511F] px-2' onClick={() => setReviewFilter(4)}>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/> & Up
                 </button>
-                <button className='flex hover:text-[#C7511F] px-2' onClick={() => handleReviewFilter(3)}>
+                <button className='flex hover:text-[#C7511F] px-2' onClick={() => setReviewFilter(3)}>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/> & Up
                 </button>
-                <button className='flex hover:text-orange-400 px-2' onClick={() => handleReviewFilter(2)}>
+                <button className='flex hover:text-orange-400 px-2' onClick={() => setReviewFilter(2)}>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/> & Up
                 </button>
-                <button className='flex hover:text-[#C7511F] px-2' onClick={() => handleReviewFilter(1)}>
+                <button className='flex hover:text-[#C7511F] px-2' onClick={() => setReviewFilter(1)}>
                     <AiFillStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/>
                     <AiOutlineStar className="text-orange-400 mt-1"/>
@@ -104,11 +117,12 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
             </div>
             <div id="priceFilter" className='flex flex-col px-2 mt-1 text-md'>
                 <h1>Price</h1>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> handlePriceFilter(0, 25)}>Up to $25</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> handlePriceFilter(25, 50)}>$25 to $50</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> handlePriceFilter(50, 100)}>$50 to $100</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> handlePriceFilter(100, 200)}>$100 to $200</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> handlePriceFilter(200, Infinity)}>$200 & above</span>
+                <button onClick={() => setPriceFilter({min: 0, max: Infinity})} className={(priceFilter.min > 0 || priceFilter.max < Infinity) ? "flex px-2 text-xs" : "hidden"}>{`<`}<a className='hover:text-orange-400'>Any Price</a></button>
+                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 0, max: 25})}>Up to $25</span>
+                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 25, max: 50})}>$25 to $50</span>
+                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 50, max: 100})}>$50 to $100</span>
+                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 100, max: 200})}>$100 to $200</span>
+                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 200, max: Infinity})}>$200 & above</span>
                 <div className='flex'>
                     <div>
                         <span className='absolute mt-[5px] pl-[4px]'>$</span>
