@@ -43,18 +43,13 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     const maxRef = React.useRef<HTMLInputElement>(null)
     let currentDeparment = departments.filter((deparment)=> deparment.departmentId == Number(departmentId))[0]
     let currentSubDepartment = currentDeparment.subDepartment.filter((subDes)=> subDes.subDepartmentId == Number(subdepartmentId))[0]
-    // const handleReviewFilter = (stars: number) =>{
-    //     setNewItems(baseItem.filter((item)=> item.ratings >= stars))
-    //     setOnReviewFilter(stars)
-    // }
-    // const handleClearReviewFilter = () =>{
-    //     setOnReviewFilter(0)
-    //     setNewItems(baseItem.filter((item) => ( Number((item.price*item.discount).toFixed(2)) >= onPriceFilter.min && Number((item.price*item.discount).toFixed(2)) <= onPriceFilter.max )))
-    // }
-    // const handlePriceFilter = (min: number, max: number) =>{
-    //     setOnPriceFilter({min: min, max: max})
-    //     setNewItems(baseItem.filter((item) => ( Number((item.price*item.discount).toFixed(2)) >= min && Number((item.price*item.discount).toFixed(2)) <= max )))
-    // }
+
+    const handleOnGo = () =>{
+        let min = minRef.current?.value || 0
+        let max = maxRef.current?.value || Infinity
+        setPriceFilter({min: Number(min), max: Number(max)})
+    }
+
     React.useEffect(()=>{
         setNewItems(
                 baseItem.filter((item)=> item.ratings >= reviewFilter)
@@ -64,12 +59,14 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                 )
             )
     },[reviewFilter, priceFilter])
+    
     React.useEffect(()=>{
         baseItem = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
         setNewItems(baseItem)
         setReviewFilter(0)
         setPriceFilter({min: 0, max: Infinity})
     },[subdepartmentId])
+
   return (
     <div className='flex col min-h-[40rem] mt-[-79px]'>
         <div className=' w-[25%]'>
@@ -118,21 +115,21 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
             <div id="priceFilter" className='flex flex-col px-2 mt-1 text-md'>
                 <h1>Price</h1>
                 <button onClick={() => setPriceFilter({min: 0, max: Infinity})} className={(priceFilter.min > 0 || priceFilter.max < Infinity) ? "flex px-2 text-xs" : "hidden"}>{`<`}<a className='hover:text-orange-400'>Any Price</a></button>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 0, max: 25})}>Up to $25</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 25, max: 50})}>$25 to $50</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 50, max: 100})}>$50 to $100</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 100, max: 200})}>$100 to $200</span>
-                <span className='cursor-pointer hover:text-[#C7511F]' onClick={()=> setPriceFilter({min: 200, max: Infinity})}>$200 & above</span>
+                <span className={priceFilter.min == 0 && priceFilter.max == 25  ? 'font-black cursor-pointer hover:text-[#C7511F]':'cursor-pointer hover:text-[#C7511F]'} onClick={()=> setPriceFilter({min: 0, max: 25})}>Up to $25</span>
+                <span className={priceFilter.min == 25 && priceFilter.max == 50  ? 'font-black cursor-pointer hover:text-[#C7511F]':'cursor-pointer hover:text-[#C7511F]'} onClick={()=> setPriceFilter({min: 25, max: 50})}>$25 to $50</span>
+                <span className={priceFilter.min == 50 && priceFilter.max == 100  ? 'font-black cursor-pointer hover:text-[#C7511F]':'cursor-pointer hover:text-[#C7511F]'} onClick={()=> setPriceFilter({min: 50, max: 100})}>$50 to $100</span>
+                <span className={priceFilter.min == 100 && priceFilter.max == 200  ? 'font-black cursor-pointer hover:text-[#C7511F]':'cursor-pointer hover:text-[#C7511F]'} onClick={()=> setPriceFilter({min: 100, max: 200})}>$100 to $200</span>
+                <span className={priceFilter.min == 200? 'font-black cursor-pointer hover:text-[#C7511F]':'cursor-pointer hover:text-[#C7511F]'} onClick={()=> setPriceFilter({min: 200, max: Infinity})}>$200 & above</span>
                 <div className='flex'>
                     <div>
                         <span className='absolute mt-[5px] pl-[4px]'>$</span>
-                        <input className='outline outline-0 p-1 pl-[12px] mr-1 max-w-[60px] border rounded-[4px] border-[#888C8C] border-solid shadow-md focus:shadow-3xl' ref={minRef} placeholder='Min'></input>
+                        <input className='outline outline-0 p-1 pl-[12px] mr-1 max-w-[60px] border rounded-[4px] border-[#888C8C] border-solid shadow-md focus:shadow-3xl' type="number" ref={minRef} placeholder='Min'></input>
                     </div>
                     <div>
                         <span className='absolute mt-[5px] pl-[4px]'>$</span>
-                        <input className='outline outline-0 p-1 pl-[12px] mr-1 max-w-[60px] border rounded-[4px] border-[#888C8C] border-solid shadow-md focus:shadow-3xl' ref={maxRef} placeholder='Max'></input>
+                        <input className='outline outline-0 p-1 pl-[12px] mr-1 max-w-[60px] border rounded-[4px] border-[#888C8C] border-solid shadow-md focus:shadow-3xl' type="number" ref={maxRef} placeholder='Max'></input>
                     </div>
-                    <button>Go</button>
+                    <button onClick={()=> handleOnGo()}>Go</button>
                 </div>
             </div>
         </div>
