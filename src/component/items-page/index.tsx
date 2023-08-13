@@ -41,6 +41,7 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     const [priceFilter, setPriceFilter] = React.useState({min: 0, max: Infinity})
     const minRef = React.useRef<HTMLInputElement>(null)
     const maxRef = React.useRef<HTMLInputElement>(null)
+    const sortRef = React.useRef<HTMLSelectElement>(null)
     let currentDeparment = departments.filter((deparment)=> deparment.departmentId == Number(departmentId))[0]
     let currentSubDepartment = currentDeparment.subDepartment.filter((subDes)=> subDes.subDepartmentId == Number(subdepartmentId))[0]
 
@@ -50,14 +51,23 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
         setPriceFilter({min: Number(min), max: Number(max)})
     }
 
+    const sortItems = (items: any) =>{
+        let option = Number(sortRef.current?.value) || 0
+        switch(option){
+            case 0:
+                return [...items].sort((a,b) => a.itemId - b.itemId)
+            case 1:
+                return [...items].sort((a,b) => a.price*a.discount - b.price*b.discount)
+            case 2:
+                return [...items].sort((a,b) => b.price*b.discount - a.price*a.discount)
+            case 3:
+                return [...items].sort((a,b) => b.ratings - a.ratings)
+        }
+    }
+
     React.useEffect(()=>{
-        setNewItems(
-                baseItem.filter((item)=> item.ratings >= reviewFilter)
-                .filter(
-                    (item) => (Number((item.price*item.discount).toFixed(2)) >= priceFilter.min 
-                    && Number((item.price*item.discount).toFixed(2)) <= priceFilter.max )
-                )
-            )
+        let test = sortItems(baseItem.filter((item)=> item.ratings >= reviewFilter).filter((item) => (Number((item.price*item.discount).toFixed(2)) >= priceFilter.min && Number((item.price*item.discount).toFixed(2)) <= priceFilter.max )))
+        setNewItems(test!)
     },[reviewFilter, priceFilter])
     
     React.useEffect(()=>{
@@ -134,8 +144,17 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
             </div>
         </div>
         <div className=' w-full '>
-            <div>
-                <h1>Results</h1>
+            <div className='flex justify-between'>
+                <h1 className='m-2'>1-{newItems.length} of {newItems.length} results for "{currentSubDepartment.subDepartmentName}"</h1>
+                <div>
+                    <label className='text-md my-2'>Sort by:</label>
+                    <select onChange={()=>setNewItems(sortItems(newItems)!)} ref={sortRef} className='text-md m-2 border border-gray-400 rounded-lg shadow-md focus:shadow-3xl' placeholder='Sort by:'>
+                        <option value={0}>Featured</option>
+                        <option value={1}>Price: Low to High</option>
+                        <option value={2}>Price: High to Low</option>
+                        <option value={3}>Avg. Customer Review</option>
+                    </select>
+                </div>
             </div>
             <div className='grid grid-cols-4 gap-2'>
                 {
