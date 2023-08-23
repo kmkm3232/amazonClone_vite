@@ -4,11 +4,14 @@ interface ShoppingCartProps{
     shoppingCart: Array<{id:number, qty:number, options:Array<any>, depId: number, subDepId: number, checked: boolean, price:number}>,
     setShoppingCart: React.Dispatch<React.SetStateAction<any>>,
     items: {
-        itemId: number,
+        id: number,
         itemName: string,
         price: number,
         discount: number,
-        subdepartmentId: number,
+        subdepartment:{
+            id: number,
+            subdepartmentName: string
+        },
         options: {
             name: string,
             choices: {
@@ -103,18 +106,21 @@ export const ShoppCartPage: React.FC<ShoppingCartProps> = (props) => {
     }
     return (
         <div className="flex mt-[-70px] mx-[3%] min-h-[85vh]">
+            {
+                items? 
+            
             <div className="grow basis-4/5">
                 <h1 className="text-2xl font-bold">Shopping Cart</h1>
                 <button className="text-xs mt-2 text-[#007185] hover:underline">Deselect all items</button>
                 <hr className={deleted.id == -1 ? "hidden" : "my-2"}></hr>
-                <div className={deleted.id == -1 ? "hidden" : "p-3"}> <Link className="hover:underline text-[#007185]" to={`/itempage/${deleted.depId}/${deleted.subDepId}/${deleted.id}`}>{items.find((item)=> item.itemId == deleted.id)?.itemName} </Link>was removed from Shopping Cart.</div>
+                <div className={deleted.id == -1 ? "hidden" : "p-3"}> <Link className="hover:underline text-[#007185]" to={`/itempage/${deleted.depId}/${deleted.subDepId}/${deleted.id}`}>{items.find((item)=> item.id == deleted.id)?.itemName} </Link>was removed from Shopping Cart.</div>
                 <hr className="my-2"></hr>
                 <div>
                     {
                         shoppingCart.map((good)=>{
-                            let item = items.find((item)=> item.itemId == good.id)
+                            let item = items.find((item)=> item.id == good.id)
                             return(
-                                <div key={item?.itemId} >
+                                <div key={item?.id} >
                                     <div className="flex">
                                         <input className="mx-5" type="checkbox" checked={good.checked} onChange={()=> handleOnCheck(good)}></input>
                                         <div className="grow basis-1/5 mx-2 bg-gray-300">image</div>
@@ -148,6 +154,11 @@ export const ShoppCartPage: React.FC<ShoppingCartProps> = (props) => {
                 </div>
                 
             </div>
+            :
+            <div>
+                loading...
+            </div>
+            }
             <div className="grow basis-1/5">side</div>
         </div>
     )

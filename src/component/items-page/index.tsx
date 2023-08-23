@@ -4,13 +4,16 @@ import { FaStarHalfStroke } from 'react-icons/fa6'
 import { Link, useParams } from 'react-router-dom'
 interface ItemsPageProp{
     items: {
-        itemId: number,
+        id: number,
         itemName: string,
         price: number,
         discount: number,
-        subdepartmentId: number,
+        subdepartment:{
+            id: number,
+            subdepartmentName: string
+        },
         options: {
-            name: string,
+            optionName: string,
             choices: {
                 choiceId: number,
                 name: string,
@@ -34,8 +37,8 @@ interface ItemsPageProp{
 
 const ItemsPage: React.FC<ItemsPageProp> = (props) => {
     const { departmentId, subdepartmentId } = useParams()
-    const { items, setItems, departments} = props
-    let baseItem = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
+    const { items, departments} = props
+    let baseItem = items?.filter((item)=> item.subdepartment.id == Number(subdepartmentId))
     const [newItems, setNewItems] = React.useState(baseItem)
     const [reviewFilter, setReviewFilter] = React.useState(0)
     const [priceFilter, setPriceFilter] = React.useState({min: 0, max: Infinity})
@@ -55,7 +58,7 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
         let option = Number(sortRef.current?.value) || 0
         switch(option){
             case 0:
-                return [...items].sort((a,b) => a.itemId - b.itemId)
+                return items
             case 1:
                 return [...items].sort((a,b) => a.price*a.discount - b.price*b.discount)
             case 2:
@@ -64,14 +67,16 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                 return [...items].sort((a,b) => b.ratings - a.ratings)
         }
     }
-
     React.useEffect(()=>{
-        let test = sortItems(baseItem.filter((item)=> item.ratings >= reviewFilter).filter((item) => (Number((item.price*item.discount).toFixed(2)) >= priceFilter.min && Number((item.price*item.discount).toFixed(2)) <= priceFilter.max )))
-        setNewItems(test!)
+        setNewItems(baseItem)
+    },[props])
+    React.useEffect(()=>{
+        let results = sortItems(baseItem?.filter((item)=> item.ratings >= reviewFilter).filter((item) => (Number((item.price*item.discount).toFixed(2)) >= priceFilter.min && Number((item.price*item.discount).toFixed(2)) <= priceFilter.max )))
+        setNewItems(results!)
     },[reviewFilter, priceFilter])
     
     React.useEffect(()=>{
-        baseItem = items.filter((item)=> item.subdepartmentId == Number(subdepartmentId))
+        baseItem = items?.filter((item)=> item.subdepartment.id == Number(subdepartmentId))
         setNewItems(baseItem)
         setReviewFilter(0)
         setPriceFilter({min: 0, max: Infinity})
@@ -143,9 +148,14 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                 </div>
             </div>
         </div>
+        { baseItem ? 
         <div className=' w-full '>
             <div className='flex justify-between'>
-                <h1 className='m-2'>1-{newItems.length} of {newItems.length} results for "{currentSubDepartment.subDepartmentName}"</h1>
+                {
+                    baseItem ? 
+                    <h1 className='m-2'>1-{newItems?.length} of {newItems?.length} results for "{currentSubDepartment.subDepartmentName}"</h1>  :
+                    <h1 className='m-2'>loading...</h1>
+                }
                 <div>
                     <label className='text-md my-2'>Sort by:</label>
                     <select onChange={()=>setNewItems(sortItems(newItems)!)} ref={sortRef} className='text-md m-2 border border-gray-400 rounded-lg shadow-md focus:shadow-3xl' placeholder='Sort by:'>
@@ -158,10 +168,10 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
             </div>
             <div className='grid grid-cols-4 gap-2'>
                 {
-                    newItems.map((newItem)=>{
+                    newItems?.map((newItem)=>{
                         return (
-                            <div key={newItem.itemId} className='min-h-[25rem]  border border-r-2 border-gray-200'>
-                                <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.itemId}`}>
+                            <div key={newItem.id} className='min-h-[25rem]  border border-r-2 border-gray-200'>
+                                <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.id}`}>
                                     <div className='bg-gray-300 h-[70%]'>Image</div>
                                     <div className='m-2 hover:text-orange-400'>{newItem.itemName}</div>
                                     <div className='m-2 flex'>
@@ -188,7 +198,8 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                 }
             </div>
             
-        </div>
+        </div> : <div className='w-full'>loading...</div>
+        }
     </div>
   )
 }

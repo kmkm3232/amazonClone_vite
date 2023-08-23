@@ -2,11 +2,14 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 interface ItemPageProp{
     items: {
-        itemId: number,
+        id: number,
         itemName: string,
         price: number,
         discount: number,
-        subdepartmentId: number,
+        subdepartment:{
+            id: number,
+            subdepartmentName: string
+        },
         options: {
             name: string,
             choices: {
@@ -36,19 +39,19 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
     const qtyRef = React.useRef<HTMLSelectElement>(null)
     let currDep = departments.filter((dep)=> dep.departmentId == Number(currentDeparment))[0]
     let currentSubDep = currDep.subDepartment.filter((subdep)=> subdep.subDepartmentId == Number(currentSubDepartment))[0]
-    let target = items.filter((item)=> item.itemId == Number(itemId))[0]
+    let target = items?.filter((item)=> item.id == Number(itemId))[0]
     // target.stock 
     let qtyOption = new Array(10).fill(0)
     const handleOnsubmit = (event:React.FormEvent<HTMLFormElement>) =>{
         event.preventDefault();
         /// [...] is a must to let react rerender
         let temp = [...shoppingCart]
-        let curr = temp.find(item => item.id == target.itemId)
+        let curr = temp.find(item => item.id == target.id)
         if(curr){
             curr.qty += Number(qtyRef.current?.value)
         }else{
             temp.push({
-                id:target.itemId,
+                id:target.id,
                 qty: Number(qtyRef.current?.value),
                 options: [],
                 depId: currDep.departmentId,
@@ -66,6 +69,8 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
     <div className='mt-[-70px] mx-[2.5%] min-h-[85vh]'>
         <div className=''>Reserved for ads</div>
         <div className='text-xs p-2 text-gray-500'>{`${currDep.departmentName} > ${currentSubDep.subDepartmentName}`}</div>
+        {
+            target ? 
         <div className='flex'>
             <div className='mt-2 grow basis-1/3'>
                 <div className='h-[40rem] bg-slate-500'>
@@ -137,6 +142,11 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
                 </form>
             </div>
         </div>
+        :
+        <div className='flex'>
+            loading...
+        </div>
+        }
         <div>Suggest</div>
     </div>
   )
