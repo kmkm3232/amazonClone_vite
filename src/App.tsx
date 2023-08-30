@@ -10,6 +10,7 @@ import SearchPage from './component/search-page'
 import { sampleItems } from './assets/items'
 import { sampleDepartments } from './assets/departments'
 import axios, { AxiosResponse } from 'axios'
+import RegisterPage from './component/register-page'
 
 function App() {
   const [departments, setDepartments] = React.useState(sampleDepartments)
@@ -37,6 +38,10 @@ function App() {
         <Route 
           path='searchpage/:departmentId/:query?'
           element={<SearchPage items={items} departments={departments}/>}
+        />
+        <Route 
+          path='register'
+          element={<RegisterPage/>}
         />
       </Routes>
     </>
