@@ -22,7 +22,8 @@ interface ItemsPageProp{
         }[],
         ratings: number,
         ratingCount: number,
-        about: string
+        about: string,
+        image: string
     }[],
     setItems: React.Dispatch<React.SetStateAction<any>>,
     departments: {
@@ -172,7 +173,7 @@ const ItemsPage: React.FC<ItemsPageProp> = (props) => {
                         return (
                             <div key={newItem.id} className='min-h-[25rem]  border border-r-2 border-gray-200'>
                                 <Link to={`/itempage/${currentDeparment.departmentId}/${currentSubDepartment.subDepartmentId}/${newItem.id}`}>
-                                    <div className='bg-gray-300 h-[70%]'>Image</div>
+                                    <div className='bg-white-300 h-[70%] '><img className='max-w-[50%]  min-h-full min-w-[50%] ml-auto mr-auto' src={`/assets/product-image/${newItem.image}.jpg`} alt={`image ${newItem.image}`} /></div>
                                     <div className='m-2 hover:text-orange-400'>{newItem.itemName}</div>
                                     <div className='m-2 flex'>
                                         <div className='flex'>

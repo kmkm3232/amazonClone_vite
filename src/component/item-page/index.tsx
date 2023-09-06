@@ -20,7 +20,8 @@ interface ItemPageProp{
         }[],
         ratings: number,
         ratingCount: number,
-        about: string
+        about: string,
+        image: string
     }[],
     departments: {
         departmentId: number, 
@@ -73,8 +74,8 @@ const ItemPage: React.FC<ItemPageProp> = (props) => {
             target ? 
         <div className='flex'>
             <div className='mt-2 grow basis-1/3'>
-                <div className='h-[40rem] bg-slate-500'>
-                    Image
+                <div className='h-[30rem]'>
+                    <img className='max-w-[50%] max-h-[100%] min-h-[100%] min-w-[50%] ml-auto mr-auto' src={`/assets/product-image/${target.image}.jpg`} alt={`image ${target.image}`} />
                 </div>
             </div>
             <div className='mt-2 grow basis-1/3 p-2'>
